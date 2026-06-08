@@ -39,5 +39,11 @@ jobs:
           git config --local user.email "actions@github.com"
           git config --local user.name "actions-user"
           git add output/*
+          # 如果没有文件改变就直接退出，不报错
           git commit -m "自动更新节点: $(date +'%Y-%m-%d %H:%M:%S')" || exit 0
-          git push
+          
+          # 【核心修复】先拉取服务器上的最新更新，防止冲突
+          git pull --rebase origin main
+          
+          # 再推送到服务器
+          git push origin main
